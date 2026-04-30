@@ -220,33 +220,22 @@ For users working outside ArcGIS Pro, it is recommended to:
 Location:
 
 ```text
-Clipped/
+output_folder/
 ```
 
-Contains raster files clipped to the Hungary study area.
+Contains raster files clipped to the study area.
 
 ---
 
-## Summer Raster Subset
+## Dated and Dissolved .shp files
 
 Location:
 
 ```text
-Summer_Rasters/
+outh_folder/
 ```
 
-Contains only summer-season raster observations.
-
----
-
-## Temporal Analysis Outputs
-
-Generated outputs may include:
-
-* Time-series plots
-* Statistical summaries
-* Processed tabular datasets
-* Intermediate drought indicators
+Contains shapefiles previously processed from a GDB, data column added and poligons transferred to multipoligons.
 
 ---
 
@@ -265,21 +254,6 @@ Before running the notebooks on another machine:
 
 ✅ Ensure raster and shapefile datasets are available locally
 
----
-
-# 🔧 Potential Improvements
-
-Future improvements may include:
-
-* Config-driven path management
-* Parallel raster processing
-* Automated logging
-* Interactive visualizations
-* Additional statistical drought indicators
-* Integration with machine learning workflows
-* Improved notebook modularization
-
----
 
 # 📚 Use Cases
 
@@ -298,8 +272,3 @@ This repository may be useful for:
 
 Created by Emese Lana Gojdár as part of a GIS thesis workflow focusing on drought analysis and geospatial data processing in Hungary.
 
----
-
-# 🤝 Contributions
-
-Suggestions, pull requests, and improvements are welcome.
