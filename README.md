@@ -1,76 +1,76 @@
-# 🌍 Drought Raster Processing & Analysis (Hungary)
+# 🌍 Geospatial Drought Analysis & Time-Series Processing (Hungary)
 
-## 📌 Overview
+## 📌 Project Overview
 
-This project processes raster data from the **European Drought Observatory (EDO)** and clips it to the geographic boundary of Hungary (previously extended with a 50 km buffer). It then filters the dataset to retain only **summer months (May–September)** for further analysis.
+This repository contains two Jupyter Notebook workflows developed as part of a GIS and environmental data analysis thesis project focusing on drought-related geospatial processing in Hungary.
 
-The workflow is implemented in a Jupyter Notebook and focuses on:
+The project combines:
+
+1. **Raster-based drought preprocessing and clipping** using data from the European Drought Observatory (EDO)
+2. **Temporal analysis and visualization workflows** for processed drought datasets
+
+The workflows are implemented in Python using geospatial and scientific computing libraries such as Rasterio, GeoPandas, Pandas, NumPy, and Matplotlib.
+
+---
+
+# 📂 Repository Structure
+
+```text
+.
+├── README.md
+├── drought_clip.ipynb          # Raster clipping and summer filtering workflow
+├── date_n_diss.ipynb           # Temporal analysis and visualization workflow
+
+```
+
+---
+
+# 📘 Notebook Descriptions
+
+## 1️⃣ EDO DATA CLIPPING - drought_clip.ipynb
+
+### Purpose
+
+This notebook processes raster datasets obtained from the **European Drought Observatory (EDO)** and clips them to the geographic boundary of Hungary.
+
+The workflow also filters the processed rasters to retain only summer-season observations for further environmental analysis.
+
+### Main Tasks
 
 * Batch processing of `.tif` raster files
-* Spatial clipping using a country shapefile
-* Coordinate Reference System (CRS) alignment
-* Seasonal filtering of raster datasets
+* Spatial clipping using Hungary boundary shapefiles
+* CRS harmonization
+* Summer month filtering (May–September)
+* Exporting clipped raster datasets
 
----
+### Workflow Summary
 
-## 🗂️ Project Structure
+#### Step 1 — Load Required Libraries
 
-```
-.
-├── drought_test.ipynb        # Main processing notebook
-├── data/
-│   ├── EuropeanDroughtObservatory/   # Raw raster files (.tif)
-│   ├── hungary_shape/                # Hungary shapefile
-│   ├── Clipped/                      # Output: clipped rasters
-│   └── Summer_Rasters/               # Output: summer-only rasters
-```
-
----
-
-## ⚙️ Requirements
-
-Install the required Python libraries:
-
-```bash
-pip install rasterio geopandas
-```
-
-### Dependencies
-
-* `rasterio` – raster data processing
-* `geopandas` – vector data handling
-* `glob` / `pathlib` – file handling
-* `os` – directory management
-
----
-
-## 🚀 Workflow
-
-### 1. Load Libraries
-
-The notebook starts by importing required geospatial and file-handling libraries.
-
----
-
-### 2. Define File Paths
-
-Set paths for:
-
-* Input raster folder
-* Hungary shapefile
-* Output directories
+Imports geospatial and file-handling libraries:
 
 ```python
-raster_folder = "path/to/raster/data"
-shapefile_path = "path/to/hungary_shapefile.shp"
-output_folder = "path/to/output/clipped"
+import rasterio
+import geopandas as gpd
+import glob
+import os
 ```
 
 ---
 
-### 3. Load Shapefile
+#### Step 2 — Define Input and Output Paths
 
-The Hungary boundary is loaded using GeoPandas:
+Paths are specified for:
+
+* Input raster datasets
+* Hungary shapefile
+* Output folders
+
+---
+
+#### Step 3 — Load Hungary Boundary
+
+The shapefile is loaded using GeoPandas:
 
 ```python
 gdf = gpd.read_file(shapefile_path)
@@ -78,9 +78,9 @@ gdf = gpd.read_file(shapefile_path)
 
 ---
 
-### 4. Discover Raster Files
+#### Step 4 — Discover Raster Files
 
-All `.tif` files are recursively collected:
+All raster datasets are recursively collected:
 
 ```python
 raster_files = glob.glob(os.path.join(raster_folder, "**", "*.tif"), recursive=True)
@@ -88,106 +88,193 @@ raster_files = glob.glob(os.path.join(raster_folder, "**", "*.tif"), recursive=T
 
 ---
 
-### 5. Clip Rasters to Hungary
+#### Step 5 — Clip Rasters
 
-For each raster:
+Each raster is:
 
-* Open file using `rasterio`
-* Ensure CRS matches the shapefile
-* Clip using `rasterio.mask`
-* Save output raster
-
-Key steps:
-
-* CRS alignment (`gdf.to_crs`)
-* Geometry masking
-* Metadata update
+* Opened with Rasterio
+* Reprojected if necessary
+* Clipped using Hungary geometry
+* Saved with updated metadata
 
 ---
 
-### 6. Filter Summer Months 🌞
+#### Step 6 — Filter Summer Months 🌞
 
-After clipping, rasters are filtered based on filename date:
+The notebook extracts dates from raster filenames and retains only:
 
-* Expected filename format includes `YYYYMMDD`
-* Extract month from filename
-* Keep only:
+* May (`05`)
+* June (`06`)
+* July (`07`)
+* August (`08`)
+* September (`09`)
 
-  * May (`05`)
-  * June (`06`)
-  * July (`07`)
-  * August (`08`)
-  * September (`09`)
+Filtered rasters are stored in:
 
-Example logic:
-
-```python
-date_str = fname.split("_")[3]
-month = date_str[4:6]
-```
-
-Filtered rasters are saved into:
-
-```
+```text
 Summer_Rasters/
 ```
 
 ---
 
-## 📊 Outputs
+## 2️⃣ date_n_diss.ipynb
 
-### 1. Clipped Rasters
+### Purpose
 
-* Location: `Clipped/`
-* Content: All rasters clipped to Hungary
+This notebook focuses on temporal analysis and exploratory processing of drought-related datasets.
 
-### 2. Summer Rasters
+The workflow supports:
 
-* Location: `Summer_Rasters/`
-* Content: Subset of rasters for summer months only
+* Time-series preparation
+* Date-based filtering
+* Statistical exploration
+* Visualization of temporal drought patterns
+* Data organization for further thesis analysis
 
----
+### Main Tasks
 
-## ⚠️ Notes & Assumptions
+* Parsing and formatting date fields
+* Time-series aggregation
+* Data cleaning and preprocessing
+* Exploratory plotting and visualization
+* Supporting drought trend interpretation
 
-* Raster filenames must contain a date in `YYYYMMDD` format
-* CRS mismatches are automatically handled
-* NoData values are preserved during clipping
-* Paths in the notebook are currently hardcoded (Windows format)
+### Typical Libraries Used
 
-👉 You should update paths before running on a different system.
-
----
-
-## 🔧 Potential Improvements
-
-If you want to level this up (recommended):
-
-* Replace hardcoded paths with a config file or arguments
-* Add logging instead of print statements
-* Validate filename structure before parsing dates
-* Parallelize raster processing for large datasets
-* Add visualization (e.g., matplotlib)
+```python
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+import seaborn as sns
+```
 
 ---
 
-## 📚 Use Case
+# ⚙️ Requirements
 
-This workflow is useful for:
+Install the required dependencies before running the notebooks.
+
+## Core Dependencies
+
+```bash
+pip install rasterio geopandas rioxarray xarray matplotlib seaborn pandas numpy scipy
+```
+
+## Additional Dependencies
+
+```bash
+pip install tqdm
+```
+
+---
+
+# 🧪 Recommended Environment
+
+The workflows were developed using:
+
+* Python 3.11
+* Jupyter Notebook
+* Anaconda environment
+* Windows operating system
+
+Using a virtual environment or Conda environment is strongly recommended.
+
+Example:
+
+```bash
+conda create -n drought_env python=3.11
+conda activate drought_env
+```
+
+---
+
+# 📊 Outputs
+
+## Clipped Raster Datasets
+
+Location:
+
+```text
+Clipped/
+```
+
+Contains raster files clipped to the Hungary study area.
+
+---
+
+## Summer Raster Subset
+
+Location:
+
+```text
+Summer_Rasters/
+```
+
+Contains only summer-season raster observations.
+
+---
+
+## Temporal Analysis Outputs
+
+Generated outputs may include:
+
+* Time-series plots
+* Statistical summaries
+* Processed tabular datasets
+* Intermediate drought indicators
+
+---
+
+# ⚠️ Notes & Assumptions
+
+* Raster filenames are expected to contain dates in `YYYYMMDD` format
+* CRS mismatches are automatically handled during clipping
+* File paths are currently hardcoded in some notebook cells
+* Input raster quality and naming consistency are assumed
+
+Before running the notebooks on another machine:
+
+✅ Update local file paths
+
+✅ Verify dependency installation
+
+✅ Ensure raster and shapefile datasets are available locally
+
+---
+
+# 🔧 Potential Improvements
+
+Future improvements may include:
+
+* Config-driven path management
+* Parallel raster processing
+* Automated logging
+* Interactive visualizations
+* Additional statistical drought indicators
+* Integration with machine learning workflows
+* Improved notebook modularization
+
+---
+
+# 📚 Use Cases
+
+This repository may be useful for:
 
 * Drought monitoring
+* Environmental GIS workflows
+* Raster preprocessing
 * Seasonal environmental analysis
-* Preprocessing raster datasets for GIS or machine learning
+* Remote sensing studies
+* Thesis and academic GIS projects
 
 ---
 
-## 👤 Author
+# 👤 Author
 
-Created by Emese Lana Gojdár as part of a GIS thesis workflow focusing on drought analysis in Hungary, 2026.
+Created by Emese Lana Gojdár as part of a GIS thesis workflow focusing on drought analysis and geospatial data processing in Hungary.
 
 ---
 
+# 🤝 Contributions
 
-## 🤝 Contributions
-
-Pull requests and suggestions are welcome!
+Suggestions, pull requests, and improvements are welcome.
