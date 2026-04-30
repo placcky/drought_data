@@ -27,7 +27,7 @@ The workflows are implemented in Python using geospatial and scientific computin
 
 # 📘 Notebook Descriptions
 
-## 1️⃣ EDO DATA CLIPPING - drought_clip.ipynb
+## 1️⃣ drought_clip.ipynb
 
 ### Purpose
 
@@ -185,6 +185,31 @@ Example:
 conda create -n drought_env python=3.11
 conda activate drought_env
 ```
+
+## ArcPy / ArcGIS Pro Requirement
+
+The `date_n_diss.ipynb` workflow requires an **ArcGIS Pro Python environment** because it uses the `arcpy` library.
+
+This notebook should therefore be run using:
+
+* ArcGIS Pro
+* ArcGIS Pro Jupyter Notebook
+* or a cloned ArcGIS Pro Conda environment
+
+Example kernel/environment:
+
+```bash
+arcgispro-py3
+```
+
+If the notebook is opened in a standard Anaconda or Jupyter environment without ArcPy installed, several cells will fail.
+
+For users working outside ArcGIS Pro, it is recommended to:
+
+1. Open ArcGIS Pro
+2. Launch the notebook from within ArcGIS Pro
+3. Or register the ArcGIS Pro Conda environment as a Jupyter kernel
+
 
 ---
 
